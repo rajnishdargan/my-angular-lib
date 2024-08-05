@@ -28,11 +28,15 @@ jobs:
       - name: Ensure jq is installed
         run: sudo apt-get install -y jq
 
+      - name: Debug .npmrc
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NODE_AUTH_TOKEN }}" > ~/.npmrc
+          cat ~/.npmrc
+
       - name: Publish to NPM
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
         run: |
-          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
           cd dist/nebula-test-lib
           if [[ "$(jq -r .version package.json)" == *"beta"* ]]; then
             npm publish --tag=beta --access public
