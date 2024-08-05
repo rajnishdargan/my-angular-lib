@@ -25,6 +25,8 @@ jobs:
         run: npm run build-lib
 
       - name: Publish to NPM
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           cd dist/nebula-test-lib
           if [[ "$(jq -r .version package.json)" == *"beta"* ]]; then
@@ -32,5 +34,3 @@ jobs:
           else
             npm publish --access public
           fi
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
