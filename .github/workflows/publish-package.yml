@@ -22,8 +22,10 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Build Library
-        run: npm run build-lib
+      - name: Build Library and Package
+        run: |
+          npm run build-lib
+          npm pack ./dist/nebula-test-lib
 
       - name: Ensure jq is installed
         run: sudo apt-get install -y jq
