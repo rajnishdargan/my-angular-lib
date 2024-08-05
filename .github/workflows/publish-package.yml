@@ -3,7 +3,7 @@ name: Publish NPM Package
 on:
   push:
     branches:
-      - '**'
+      - main
 
 jobs:
   publish:
@@ -24,9 +24,6 @@ jobs:
       - name: Build Library
         run: npm run build-lib
 
-      - name: Debug Environment Variables
-        run: printenv | sort
-
       - name: Ensure jq is installed
         run: sudo apt-get install -y jq
 
@@ -39,4 +36,3 @@ jobs:
             npm publish --tag=beta --access public
           else
             npm publish --access public
-          fi
