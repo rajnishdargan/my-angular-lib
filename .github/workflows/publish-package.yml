@@ -40,8 +40,5 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
         run: |
           cd dist/nebula-test-lib
-          if [[ "$(jq -r .version package.json)" == *"beta"* ]]; then
-            npm publish --tag=beta --access public
-          else
-            npm publish --access public
+          npm publish --access public
           fi
