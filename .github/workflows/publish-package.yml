@@ -8,6 +8,9 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
 
     steps:
       - name: Checkout Code Repository
@@ -22,23 +25,30 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Build Library and Package
-        run: |
-          npm run build-lib
-          npm pack ./dist/nebula-test-lib
+      - name: Build Library
+        run: npm run build-lib
 
-      - name: Ensure jq is installed
-        run: sudo apt-get install -y jq
-
-      - name: Debug .npmrc
+      - name: Pack and Publish
         run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NODE_AUTH_TOKEN }}" > ~/.npmrc
-          cat ~/.npmrc
-
-      - name: Publish to NPM
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
-        run: |
-          cd dist/nebula-test-lib
+          npm pack
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
           npm publish --access public
-          fi
+
+      # - name: Ensure jq is installed
+      #   run: sudo apt-get install -y jq
+
+      # - name: Debug .npmrc
+      #   run: |
+      #     echo "//registry.npmjs.org/:_authToken=${{ secrets.NODE_AUTH_TOKEN }}" > ~/.npmrc
+      #     cat ~/.npmrc
+
+      # - name: Publish to NPM
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+      #   run: |
+      #     cd dist/nebula-test-lib
+      #     if [[ "$(jq -r .version package.json)" == *"beta"* ]]; then
+      #       npm publish --tag=beta --access public
+      #     else
+      #       npm publish --access public
+      #     fi
