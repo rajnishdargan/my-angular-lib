@@ -31,7 +31,18 @@ jobs:
       - name: Ensure jq is installed
         run: sudo apt-get install -y jq
 
+      - name: Check if version exists
+        id: check-version
+        run: |
+          cd dist/nebula-test-lib
+          PACKAGE_NAME=$(jq -r .name package.json)
+          PACKAGE_VERSION=$(jq -r .version package.json)
+          NPM_REGISTRY="https://registry.npmjs.org"
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$NPM_REGISTRY/$PACKAGE_NAME/$PACKAGE_VERSION")
+          echo "status=$STATUS" >> $GITHUB_ENV
+
       - name: Publish to NPM
+        if: env.status != '200'
         run: |
           cd dist/nebula-test-lib
           if [[ "$(jq -r .version package.json)" == *"beta"* ]]; then
@@ -41,3 +52,7 @@ jobs:
           fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Log version exists
+        if: env.status == '200'
+        run: echo "Version already exists, skipping publish."
