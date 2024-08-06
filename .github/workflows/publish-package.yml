@@ -1,4 +1,4 @@
-name: Publish NPM Package
+name: 🚀 Publish NPM Package
 
 on:
   push:
@@ -10,25 +10,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code Repository
+      - name: 📥 Checkout Code Repository
         uses: actions/checkout@v4
 
-      - name: Set Up Node.js
+      - name: 🔧 Set Up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 18
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Install Dependencies
+      - name: 📦 Install Dependencies
         run: npm install
 
-      - name: Build Library
+      - name: 🛠️ Build Library
         run: npm run build-lib
 
-      - name: Ensure jq is installed
+      - name: 🔍 Ensure jq is installed
         run: sudo apt-get install -y jq
 
-      - name: Check if version exists
+      - name: 🔍 Check if Version Exists
         id: check-version
         run: |
           cd dist/nebula-test-lib
@@ -38,7 +38,7 @@ jobs:
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$NPM_REGISTRY/$PACKAGE_NAME/$PACKAGE_VERSION")
           echo "status=$STATUS" >> $GITHUB_ENV
 
-      - name: Publish to NPM
+      - name: 🚢 Publish to NPM
         if: env.status != '200'
         run: |
           cd dist/nebula-test-lib
@@ -50,6 +50,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Log version exists
+      - name: 📜 Log Version Exists
         if: env.status == '200'
         run: echo "Version already exists, skipping publish."
