@@ -30,7 +30,7 @@ jobs:
 
       - name: Pack and Publish
         run: |
-          npm pack
+          cd dist/nebula-test-lib/
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
           npm publish --access public
 
