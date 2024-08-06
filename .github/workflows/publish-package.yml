@@ -28,26 +28,26 @@ jobs:
       - name: Build Library
         run: npm run build-lib
 
-      - name: Pack and Publish
-        run: cd dist/nebula-test-lib/ && npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # - name: Pack and Publish
+      #   run: cd dist/nebula-test-lib/ && npm publish --access public
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # - name: Ensure jq is installed
-      #   run: sudo apt-get install -y jq
+      - name: Ensure jq is installed
+        run: sudo apt-get install -y jq
 
       # - name: Debug .npmrc
       #   run: |
       #     echo "//registry.npmjs.org/:_authToken=${{ secrets.NODE_AUTH_TOKEN }}" > ~/.npmrc
       #     cat ~/.npmrc
 
-      # - name: Publish to NPM
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
-      #   run: |
-      #     cd dist/nebula-test-lib
-      #     if [[ "$(jq -r .version package.json)" == *"beta"* ]]; then
-      #       npm publish --tag=beta --access public
-      #     else
-      #       npm publish --access public
-      #     fi
+      - name: Publish to NPM
+        run: |
+          cd dist/nebula-test-lib
+          if [[ "$(jq -r .version package.json)" == *"beta"* ]]; then
+            npm publish --tag=beta --access public
+          else
+            npm publish --access public
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
