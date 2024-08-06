@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'lib-nebula-test-lib',
   template: `
     <p>
-      nebula-test-lib works!
+      Hello World!
     </p>
   `,
   styles: [
